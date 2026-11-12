@@ -1,10 +1,7 @@
+import { ClientRouter } from './features/client';
+
 function App() {
-  return (
-    <div>
-      <h1>UpTime Tracker</h1>
-      <p>Frontend application is running.</p>
-    </div>
-  );
+  return <ClientRouter />;
 }
 
 export default App;
