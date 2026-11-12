@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClients } from '../hooks/useClients';
 import { ClientTable } from '../components/ClientTable';
@@ -8,9 +8,25 @@ import { Client } from '../types/client.types';
 
 export const ClientListPage = () => {
   const navigate = useNavigate();
-  const { clients, total, filters, loading, error, updateFilters, refetch } =
-    useClients({ page: 1, limit: 10 });
+  const {
+    clients,
+    total,
+    filters,
+    loading,
+    refreshing,
+    error,
+    updateFilters,
+    refetch,
+  } = useClients({ page: 1, limit: 10 });
   const [searchQuery, setSearchQuery] = useState(filters.search ?? '');
+
+  // Debounce search so it doesn't fetch on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateFilters({ search: searchQuery });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery, updateFilters]);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this client?')) {
@@ -102,10 +118,7 @@ export const ClientListPage = () => {
           <div className="w-full sm:w-96">
             <ClientSearch
               value={searchQuery}
-              onChange={(val) => {
-                setSearchQuery(val);
-                updateFilters({ search: val });
-              }}
+              onChange={(val) => setSearchQuery(val)}
             />
           </div>
           <div>
@@ -115,6 +128,12 @@ export const ClientListPage = () => {
             />
           </div>
         </div>
+
+        {refreshing && (
+          <div className="flex justify-center py-4">
+            <p className="text-sm text-gray-500">Searching...</p>
+          </div>
+        )}
 
         <ClientTable
           clients={clients}

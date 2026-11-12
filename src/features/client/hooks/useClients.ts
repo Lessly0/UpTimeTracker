@@ -9,11 +9,31 @@ export const useClients = (initialFilters?: ClientFilters) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState<ClientFilters>(initialFilters ?? {});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // initial load only
+  const [refreshing, setRefreshing] = useState(false); // refetches from filters
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchClients = useCallback(async () => {
+  // Initial load - runs once on mount
+  useEffect(() => {
     setLoading(true);
+    setError(null);
+    clientService
+      .getClients(initialFilters ?? {})
+      .then((response: ClientListResponse) => {
+        setClients(response.data);
+        setTotal(response.total);
+      })
+      .catch((err) => {
+        setError(err instanceof Error ? err : new Error('Failed to load clients'));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  // Refresh on filter/page changes
+  const fetchClients = useCallback(async () => {
+    setRefreshing(true);
     setError(null);
     try {
       const response: ClientListResponse = await clientService.getClients(filters);
@@ -22,7 +42,7 @@ export const useClients = (initialFilters?: ClientFilters) => {
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to load clients'));
     } finally {
-      setLoading(false);
+      setRefreshing(false);
     }
   }, [filters]);
 
@@ -43,6 +63,7 @@ export const useClients = (initialFilters?: ClientFilters) => {
     total,
     filters,
     loading,
+    refreshing,
     error,
     updateFilters,
     refetch,
