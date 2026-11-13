@@ -22,10 +22,10 @@ export const ClientFilter = ({ status, onChange }: ClientFilterProps) => {
       <select
         value={status}
         onChange={(e) => onChange((e.target.value as Client['status'] | 'all'))}
-        className="block w-full pl-3 pr-10 py-2 text-sm bg-white border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"
+        className="block w-full pl-3 pr-10 py-2 text-sm bg-white border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="text-sm">
             {option.label}
           </option>
         ))}

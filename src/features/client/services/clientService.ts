@@ -66,7 +66,6 @@ const saveClients = (clients: Client[]) => {
 
 /**
  * Client API service (mocked with localStorage).
- * Replace with real HTTP calls when a backend is available.
  */
 export const clientService = {
   getClients: async (filters?: ClientFilters): Promise<ClientListResponse> => {

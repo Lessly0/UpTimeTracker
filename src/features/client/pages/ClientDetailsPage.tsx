@@ -61,7 +61,6 @@ export const ClientDetailsPage = () => {
         </div>
       </div>
 
-      <div className="max-w-2xl">
         <div className="bg-white shadow rounded-lg border border-gray-200">
           <div className="px-4 py-5 sm:p-6">
             <dl className="divide-y divide-gray-200">
@@ -126,7 +125,6 @@ export const ClientDetailsPage = () => {
             Refresh
           </button>
         </div>
-      </div>
     </div>
   );
 };

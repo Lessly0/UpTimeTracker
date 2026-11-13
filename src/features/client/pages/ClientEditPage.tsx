@@ -85,20 +85,18 @@ export const ClientEditPage = () => {
         </div>
       )}
 
-      <div className="max-w-2xl">
-        <ClientForm
-          initialData={{
-            name: client.name,
-            email: client.email,
-            phone: client.phone,
-            address: client.address,
-            status: client.status,
-          }}
-          onSubmit={handleSubmit}
-          onCancel={() => navigate('/clients')}
-          loading={saving}
-        />
-      </div>
+      <ClientForm
+        initialData={{
+          name: client.name,
+          email: client.email,
+          phone: client.phone,
+          address: client.address,
+          status: client.status,
+        }}
+        onSubmit={handleSubmit}
+        onCancel={() => navigate('/clients')}
+        loading={saving}
+      />
     </div>
   );
 };
